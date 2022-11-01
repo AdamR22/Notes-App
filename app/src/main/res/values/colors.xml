@@ -12,4 +12,7 @@
     <color name="new_note_card_stroke_color">#B9E6FE</color>
     <color name="new_note_card_content_color">#026AA2</color>
     <color name="new_note_card_add_icon_color">#36BFFA</color>
+    <color name="note_item_card_fill_color">#FCFCFD</color>
+    <color name="note_item_card_stroke_color">#E4E7EC</color>
+    <color name="note_item_timestamp_color">#101828</color>
 </resources>

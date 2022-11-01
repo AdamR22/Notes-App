@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="noteModel"
+            type="com.github.adamr22.notes_app.model.Note" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/note_item_card"
+        android:layout_marginStart="8dp"
+        style="@style/NoteItemCardStyle">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/note_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@{noteModel.title.substring(0, 10).concat(`...`)}"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:text="Best Day..."/>
+
+            <TextView
+                android:id="@+id/note_item_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:text="@{noteModel.content.substring(0, 80).concat(`...`)}"
+                android:textColor="@color/card_content_text_color"
+                android:textSize="12sp"
+                tools:text="@tools:sample/lorem/random"/>
+
+            <ImageView
+                android:id="@+id/note_item_photo"
+                android:contentDescription="@string/note_photo_content_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{noteModel.photoUri}"/>
+
+            <TextView
+                android:id="@+id/note_item_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@{noteModel.timeCreated.toString()}"
+                android:textColor="@color/note_item_timestamp_color"
+                android:textSize="12sp"
+                tools:text="22.09.2022"/>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>
