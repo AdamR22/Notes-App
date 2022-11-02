@@ -14,17 +14,34 @@
         android:layout_height="match_parent"
         tools:context=".views.ViewNotes">
 
-        <include
-            android:id="@+id/add_note"
-            layout="@layout/add_note_card_layout"/>
+        <LinearLayout
+            android:id="@+id/add_note_container"
+            android:layout_marginTop="?actionBarSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+            <include
+                android:id="@+id/add_note"
+                layout="@layout/add_note_card_layout"/>
+        </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
+            android:padding="8dp"
             android:id="@+id/rv_notes"
+            android:layout_marginTop="?actionBarSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adapter="@{adapter}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"/>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_view_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/notes"
+            style="@style/AppBarStyle"/>
 
     </FrameLayout>
 </layout>

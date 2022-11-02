@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.github.adamr22.notes_app.R
@@ -39,6 +40,7 @@ class ViewNotes : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         adapter = ViewNotesAdapter(parentFragmentManager)
         binding.adapter = adapter
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbarViewNotes)
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -46,8 +48,10 @@ class ViewNotes : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getAllNotes().collectLatest {
 
-                binding.addNote.addNoteCard.visibility =
+                binding.addNoteContainer.visibility =
                     if (it.isEmpty()) View.VISIBLE else View.GONE
+
+                binding.rvNotes.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
 
                 adapter.data.submitList(it)
             }
@@ -55,7 +59,9 @@ class ViewNotes : Fragment() {
 
         binding.addNote.addNoteCard.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, WriteEditNoteFragment.newInstance()).commit()
+                .replace(R.id.fragment_container, WriteEditNoteFragment.newInstance())
+                .addToBackStack(null)
+                .commit()
         }
 
         super.onResume()

@@ -1,16 +1,19 @@
 package com.github.adamr22.notes_app.views
 
-import androidx.lifecycle.ViewModelProvider
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.github.adamr22.notes_app.PhotoSelectorInterface
 import com.github.adamr22.notes_app.R
 import com.github.adamr22.notes_app.databinding.FragmentWriteEditNoteBinding
 import com.github.adamr22.notes_app.viewmodels.WriteEditNoteViewModel
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -27,10 +30,17 @@ class WriteEditNoteFragment : Fragment() {
         ViewModelProvider(requireActivity())[WriteEditNoteViewModel::class.java]
     }
 
+    private val selectedPhotoCallback by lazy {
+        requireActivity() as PhotoSelectorInterface
+    }
+
+    private var selectedPhotoUri: Uri? = null
+
     private lateinit var binding: FragmentWriteEditNoteBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         noteId = arguments?.getInt(NOTE_ID_TAG)
+        setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
     }
 
@@ -44,9 +54,41 @@ class WriteEditNoteFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbarEditWriteNotes)
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.toolbarEditWriteNotes.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.insert_photo -> {
+                selectedPhotoCallback.selectPhoto()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onResume() {
 
         if (noteId == null) binding.noteModel = null
+
+        if (selectedPhotoCallback.selectedPhoto() != null) {
+            selectedPhotoUri = selectedPhotoCallback.selectedPhoto()
+            Toast.makeText(requireContext(), "Note Photo Selected", Toast.LENGTH_SHORT).show()
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             noteId?.let {

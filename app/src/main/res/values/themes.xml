@@ -1,11 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.NotesApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.NotesApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/white</item>
         <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -36,6 +37,7 @@
         <item name="android:hint">@string/title_text_hint</item>
         <item name="android:textColorHint">@color/light_theme_hint_text_color</item>
         <item name="fontFamily">@font/poppins_bold</item>
+        <item name="android:textCursorDrawable">@null</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">32sp</item>
         <item name="android:background">@null</item>
@@ -46,6 +48,7 @@
         <item name="android:hint">@string/content_text_hint</item>
         <item name="android:textColorHint">@color/light_theme_hint_text_color</item>
         <item name="fontFamily">@font/poppins_bold</item>
+        <item name="android:textCursorDrawable">@null</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">18sp</item>
         <item name="android:background">@null</item>
@@ -54,5 +57,19 @@
     <style name="FabStyle" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">@color/black</item>
         <item name="tint">@color/white</item>
+    </style>
+
+    <style name="AppBarStyle" parent="Widget.AppCompat.Toolbar">
+        <item name="titleTextAppearance">@style/ToolbarTextAppearance</item>
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:elevation">4dp</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:theme">?attr/actionBarTheme</item>
+    </style>
+
+    <style name="ToolbarTextAppearance">
+        <item name="fontFamily">@font/poppins_bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>
