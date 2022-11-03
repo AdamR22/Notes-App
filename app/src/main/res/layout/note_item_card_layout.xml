@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="noteModel"
+            type="com.github.adamr22.notes_app.model.Note" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/note_item_card"
+        android:layout_margin="8dp"
+        style="@style/NoteItemCardStyle">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/note_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@{noteModel.title.length() > 10 ? noteModel.title.substring(0, 10).concat(`...`) : noteModel.title}"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:text="Best Day..."/>
+
+            <TextView
+                android:id="@+id/note_item_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:text="@{noteModel.content.length() > 80 ? noteModel.content.substring(0, 80).concat(`...`) : noteModel.content}"
+                android:textColor="@color/card_content_text_color"
+                android:textSize="12sp"
+                tools:text="@tools:sample/lorem/random"/>
+
+            <TextView
+                android:id="@+id/note_item_timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@{noteModel.timeCreated.toLocaleString()}"
+                android:textColor="@color/note_item_timestamp_color"
+                android:textSize="12sp"
+                tools:text="22.09.2022"/>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>
