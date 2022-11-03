@@ -48,11 +48,6 @@ class ViewNotes : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getAllNotes().collectLatest {
 
-                binding.addNoteContainer.visibility =
-                    if (it.isEmpty()) View.VISIBLE else View.GONE
-
-                binding.rvNotes.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
-
                 adapter.data.submitList(it)
             }
         }

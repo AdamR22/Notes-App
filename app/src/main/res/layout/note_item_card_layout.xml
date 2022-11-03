@@ -10,30 +10,33 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/note_item_card"
-        android:layout_marginStart="8dp"
+        android:layout_margin="8dp"
         style="@style/NoteItemCardStyle">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/note_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
-                android:text="@{noteModel.title.substring(0, 10).concat(`...`)}"
+                android:text="@{noteModel.title.length() > 10 ? noteModel.title.substring(0, 10).concat(`...`) : noteModel.title}"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 tools:text="Best Day..."/>
+
+
 
             <TextView
                 android:id="@+id/note_item_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="@{noteModel.content.substring(0, 80).concat(`...`)}"
+                android:text="@{noteModel.content.length() > 80 ? noteModel.content.substring(0, 80).concat(`...`) : noteModel.content}"
                 android:textColor="@color/card_content_text_color"
                 android:textSize="12sp"
                 tools:text="@tools:sample/lorem/random"/>
@@ -50,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_medium"
-                android:text="@{noteModel.timeCreated.toString()}"
+                android:text="@{noteModel.timeCreated.toLocaleString()}"
                 android:textColor="@color/note_item_timestamp_color"
                 android:textSize="12sp"
                 tools:text="22.09.2022"/>

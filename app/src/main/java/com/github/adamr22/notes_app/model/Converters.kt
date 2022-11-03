@@ -8,7 +8,7 @@ class Converters {
 
     @TypeConverter
     fun stringToUri(value: String?): Uri? {
-        return Uri.parse(value) ?: null
+        return if (value == null) null else Uri.parse(value)
     }
 
     @TypeConverter

@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/AppBarStyle"
-            app:title="@{noteModel.title == null ? `Write Note` : noteModel.title.substring(0, 10).concat(`...`)}"
+            app:title="@{noteModel.title == null ? `Write Note` : noteModel.title}"
             app:layout_constraintBottom_toTopOf="@+id/et_note_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
