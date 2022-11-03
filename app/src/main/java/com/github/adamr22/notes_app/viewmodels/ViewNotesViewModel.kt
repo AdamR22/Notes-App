@@ -1,14 +1,12 @@
 package com.github.adamr22.notes_app.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.github.adamr22.notes_app.model.NoteDB
+import androidx.lifecycle.ViewModel
 import com.github.adamr22.notes_app.repository.NoteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ViewNotesViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val repository =
-        NoteRepository(NoteDB.getInstance(application.applicationContext).noteDao())
+@HiltViewModel
+class ViewNotesViewModel @Inject constructor(private val repository: NoteRepository) : ViewModel() {
 
     fun getAllNotes() = repository.getAllNotes()
 }

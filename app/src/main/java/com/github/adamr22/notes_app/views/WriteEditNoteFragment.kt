@@ -4,18 +4,23 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.github.adamr22.notes_app.R
 import com.github.adamr22.notes_app.databinding.FragmentWriteEditNoteBinding
 import com.github.adamr22.notes_app.model.Note
 import com.github.adamr22.notes_app.viewmodels.WriteEditNoteViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 
+@AndroidEntryPoint
 class WriteEditNoteFragment : Fragment() {
 
     private val NOTE_ID_TAG = "note_id_tag"
@@ -27,15 +32,12 @@ class WriteEditNoteFragment : Fragment() {
         fun newInstance() = WriteEditNoteFragment()
     }
 
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity())[WriteEditNoteViewModel::class.java]
-    }
+    private val viewModel by viewModels<WriteEditNoteViewModel>()
 
     private lateinit var binding: FragmentWriteEditNoteBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         noteId = arguments?.getInt(NOTE_ID_TAG)
-        setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
     }
 
@@ -54,48 +56,9 @@ class WriteEditNoteFragment : Fragment() {
 
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        setUpMenu()
+
         super.onViewCreated(view, savedInstanceState)
-    }
-
-    @Deprecated("Deprecated in Java", ReplaceWith(
-        "inflater.inflate(R.menu.main_menu, menu)",
-        "com.github.adamr22.notes_app.R"
-    )
-    )
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.main_menu, menu)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-
-            R.id.delete_note -> {
-                if (noteId == null) Toast.makeText(
-                    requireContext(),
-                    "Can't delete unsaved note",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                noteId?.let {
-                    viewModel.deleteNote(
-                        Note(
-                            note?.id,
-                            note?.title!!,
-                            note?.content!!,
-                            note?.timeCreated!!
-                        )
-                    )
-
-                    Toast.makeText(requireContext(), "Note Deleted", Toast.LENGTH_SHORT).show()
-                    parentFragmentManager.popBackStack()
-                }
-
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onResume() {
@@ -144,5 +107,45 @@ class WriteEditNoteFragment : Fragment() {
         }
 
         super.onResume()
+    }
+
+    private fun setUpMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.main_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+
+                    R.id.delete_note -> {
+                        if (noteId == null) Toast.makeText(
+                            requireContext(),
+                            "Can't delete unsaved note",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        noteId?.let {
+                            viewModel.deleteNote(
+                                Note(
+                                    note?.id,
+                                    note?.title!!,
+                                    note?.content!!,
+                                    note?.timeCreated!!
+                                )
+                            )
+
+                            Toast.makeText(requireContext(), "Note Deleted", Toast.LENGTH_SHORT)
+                                .show()
+                            parentFragmentManager.popBackStack()
+                        }
+
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 }

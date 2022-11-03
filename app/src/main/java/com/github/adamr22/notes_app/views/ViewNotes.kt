@@ -1,31 +1,34 @@
 package com.github.adamr22.notes_app.views
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.github.adamr22.notes_app.R
 import com.github.adamr22.notes_app.adapters.ViewNotesAdapter
 import com.github.adamr22.notes_app.databinding.FragmentViewNotesBinding
 import com.github.adamr22.notes_app.viewmodels.ViewNotesViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ViewNotes : Fragment() {
     companion object {
         fun newInstance() = ViewNotes()
     }
 
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity())[ViewNotesViewModel::class.java]
-    }
+    private val viewModel by viewModels<ViewNotesViewModel>()
 
     private lateinit var binding: FragmentViewNotesBinding
     private lateinit var adapter: ViewNotesAdapter
@@ -41,11 +44,6 @@ class ViewNotes : Fragment() {
         sharedPref.getBoolean(IS_NIGHT_MODE_TAG, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setHasOptionsMenu(true)
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +57,8 @@ class ViewNotes : Fragment() {
         adapter = ViewNotesAdapter(parentFragmentManager)
         binding.adapter = adapter
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbarViewNotes)
+
+        setUpMenu()
 
         if (isNightMode) {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
@@ -87,33 +87,29 @@ class ViewNotes : Fragment() {
         super.onResume()
     }
 
-    @Deprecated("Deprecated in Java", ReplaceWith(
-        "inflater.inflate(R.menu.theme_menu, menu)",
-        "com.github.adamr22.notes_app.R"
-    )
-    )
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.theme_menu, menu)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.change_theme -> {
-                if (isNightMode) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
-                    sharedPref.edit().putBoolean(IS_NIGHT_MODE_TAG, false).apply()
-                }
-
-                if (!isNightMode) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-                    sharedPref.edit().putBoolean(IS_NIGHT_MODE_TAG, true).apply()
-                }
-                true
+    private fun setUpMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.theme_menu, menu)
             }
 
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.change_theme -> {
+                        if (isNightMode) {
+                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+                            sharedPref.edit().putBoolean(IS_NIGHT_MODE_TAG, false).apply()
+                        }
 
+                        if (!isNightMode) {
+                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+                            sharedPref.edit().putBoolean(IS_NIGHT_MODE_TAG, true).apply()
+                        }
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 }

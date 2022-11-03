@@ -60,6 +60,8 @@ dependencies {
     testImplementation 'com.google.dagger:hilt-android-testing:2.44'
     kaptTest 'com.google.dagger:hilt-compiler:2.44'
 
+    implementation "androidx.fragment:fragment-ktx:1.5.4"
+    implementation "androidx.activity:activity-ktx:1.6.1"
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
