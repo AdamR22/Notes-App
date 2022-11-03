@@ -57,10 +57,16 @@ class WriteEditNoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith(
+        "inflater.inflate(R.menu.main_menu, menu)",
+        "com.github.adamr22.notes_app.R"
+    )
+    )
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
 

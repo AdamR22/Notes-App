@@ -87,10 +87,16 @@ class ViewNotes : Fragment() {
         super.onResume()
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith(
+        "inflater.inflate(R.menu.theme_menu, menu)",
+        "com.github.adamr22.notes_app.R"
+    )
+    )
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.theme_menu, menu)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.change_theme -> {
