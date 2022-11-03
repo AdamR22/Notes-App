@@ -1,6 +1,5 @@
 package com.github.adamr22.notes_app.repository
 
-import android.net.Uri
 import com.github.adamr22.notes_app.model.Note
 import com.github.adamr22.notes_app.model.NoteDao
 

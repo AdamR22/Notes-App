@@ -105,10 +105,13 @@ class WriteEditNoteFragment : Fragment() {
 
         if (noteId == null) {
             binding.noteModel = null
+            binding.fabSaveNote.visibility = View.VISIBLE
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             noteId?.let {
+                binding.fabEditNote.visibility = View.VISIBLE
+                binding.fabSaveNote.visibility = View.GONE
                 viewModel.getNote(it).collectLatest { gottenNote ->
                     note = gottenNote
                     binding.noteModel = note
@@ -117,17 +120,26 @@ class WriteEditNoteFragment : Fragment() {
         }
 
         binding.fabSaveNote.setOnClickListener {
-            if (noteId == null) {
-                viewModel.saveNote(
-                    Note(
-                        title = binding.etNoteTitle.text.toString(),
-                        content = binding.etNoteContent.text.toString(),
-                        timeCreated = Date()
-                    )
+
+            viewModel.saveNote(
+                Note(
+                    title = binding.etNoteTitle.text.toString(),
+                    content = binding.etNoteContent.text.toString(),
+                    timeCreated = Date()
                 )
-                Toast.makeText(requireContext(), "Note saved", Toast.LENGTH_SHORT).show()
-                parentFragmentManager.popBackStack()
-            }
+            )
+            Toast.makeText(requireContext(), "Note saved", Toast.LENGTH_SHORT).show()
+            parentFragmentManager.popBackStack()
+
+        }
+
+        binding.fabEditNote.setOnClickListener {
+            viewModel.updateNote(
+                noteId = noteId!!,
+                title = binding.etNoteTitle.text.toString(),
+                content = binding.etNoteContent.text.toString(),
+            )
+            Toast.makeText(requireContext(), "Note edited", Toast.LENGTH_SHORT).show()
         }
 
         super.onResume()
