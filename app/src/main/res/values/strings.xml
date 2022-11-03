@@ -2,12 +2,10 @@
     <string name="app_name">Notes App</string>
     <string name="add_note">Add Note</string>
     <string name="add_note_icon_description">Add Note</string>
-    <string name="note_photo_content_description">Photo associated with note</string>
     <string name="save_note">Save Note</string>
     <string name="change_theme">Change Theme</string>
     <string name="title_text_hint">Enter title of note…</string>
     <string name="content_text_hint">This is where your note will be. It’ll be housed here. You’ll save your note here. Type your memories here. Write down your thoughts.</string>
     <string name="notes">Notes</string>
-    <string name="insert_photo">Insert Photo</string>
     <string name="delete_note">Delete Note</string>
 </resources>
