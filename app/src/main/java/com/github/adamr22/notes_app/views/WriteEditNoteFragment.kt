@@ -21,6 +21,8 @@ class WriteEditNoteFragment : Fragment() {
     private val NOTE_ID_TAG = "note_id_tag"
     var noteId: Int? = null
 
+    private var note: Note? = null
+
     companion object {
         fun newInstance() = WriteEditNoteFragment()
     }
@@ -70,7 +72,17 @@ class WriteEditNoteFragment : Fragment() {
                 ).show()
 
                 noteId?.let {
-                    // TODO: Delete note and navigate back to view notes screen
+                    viewModel.deleteNote(
+                        Note(
+                            note?.id,
+                            note?.title!!,
+                            note?.content!!,
+                            note?.timeCreated!!
+                        )
+                    )
+
+                    Toast.makeText(requireContext(), "Note Deleted", Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.popBackStack()
                 }
 
                 true
@@ -97,7 +109,8 @@ class WriteEditNoteFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             noteId?.let {
-                viewModel.getNote(it).collectLatest { note ->
+                viewModel.getNote(it).collectLatest { gottenNote ->
+                    note = gottenNote
                     binding.noteModel = note
                 }
             }
