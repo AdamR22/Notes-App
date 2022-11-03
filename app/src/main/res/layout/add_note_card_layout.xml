@@ -23,17 +23,6 @@
                 app:srcCompat="@drawable/ic_baseline_add_circle_outline_24"
                 tools:ignore="ImageContrastCheck" />
 
-            <TextView
-                android:id="@+id/tv_add_note"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="12dp"
-                android:fontFamily="@font/poppins"
-                android:text="@string/add_note"
-                android:textColor="@color/new_note_card_content_color"
-                android:textSize="14sp" />
-
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

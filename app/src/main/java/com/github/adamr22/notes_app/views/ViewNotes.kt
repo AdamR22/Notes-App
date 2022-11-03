@@ -1,12 +1,14 @@
 package com.github.adamr22.notes_app.views
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import com.github.adamr22.notes_app.R
@@ -28,6 +30,22 @@ class ViewNotes : Fragment() {
     private lateinit var binding: FragmentViewNotesBinding
     private lateinit var adapter: ViewNotesAdapter
 
+    private val THEME_TAG = "app_theme"
+    private val IS_NIGHT_MODE_TAG = "is_night_mode_on"
+
+    private val sharedPref by lazy {
+        requireContext().getSharedPreferences(THEME_TAG, Context.MODE_PRIVATE)
+    }
+
+    private val isNightMode by lazy {
+        sharedPref.getBoolean(IS_NIGHT_MODE_TAG, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,13 +59,20 @@ class ViewNotes : Fragment() {
         adapter = ViewNotesAdapter(parentFragmentManager)
         binding.adapter = adapter
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding.toolbarViewNotes)
+
+        if (isNightMode) {
+            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+        }
+
         super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onResume() {
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getAllNotes().collectLatest {
-
                 adapter.data.submitList(it)
             }
         }
@@ -60,6 +85,29 @@ class ViewNotes : Fragment() {
         }
 
         super.onResume()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.theme_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.change_theme -> {
+                if (isNightMode) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+                    sharedPref.edit().putBoolean(IS_NIGHT_MODE_TAG, false).apply()
+                }
+
+                if (!isNightMode) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+                    sharedPref.edit().putBoolean(IS_NIGHT_MODE_TAG, true).apply()
+                }
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }

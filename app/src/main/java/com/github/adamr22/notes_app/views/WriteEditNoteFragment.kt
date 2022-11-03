@@ -88,11 +88,6 @@ class WriteEditNoteFragment : Fragment() {
                 true
             }
 
-            R.id.change_theme -> {
-                // TODO: Change theme from light to dark mode and vice versa
-                true
-            }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
