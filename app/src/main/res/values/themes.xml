@@ -32,6 +32,17 @@
         <item name="strokeWidth">1dp</item>
     </style>
 
+    <style name="NoteItemCardStyleHorizontal" parent="CardView">
+        <item name="android:focusable">true</item>
+        <item name ="android:clickable">true</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardBackgroundColor">@color/note_item_card_fill_color</item>
+        <item name="strokeColor">@color/note_item_card_stroke_color</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
     <style name="ThemeNoteTitleEditText" parent="Widget.AppCompat.EditText">
         <item name="android:inputType">textMultiLine</item>
         <item name="android:hint">@string/title_text_hint</item>
