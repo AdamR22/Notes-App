@@ -16,6 +16,4 @@ data class Note(
     val content: String,
 
     var timeCreated: Date? = null,
-
-    var photoUri: Uri? = null
 )

@@ -1,12 +1,9 @@
 package com.github.adamr22.notes_app.views
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,14 +23,6 @@ class WriteEditNoteFragment : Fragment() {
 
     companion object {
         fun newInstance() = WriteEditNoteFragment()
-    }
-
-    private var selectedPhotoUri: Uri? = null
-
-    private val selectPhotoIntent = registerForActivityResult(
-        ActivityResultContracts.GetContent()
-    ) { photoUri ->
-        selectedPhotoUri = photoUri
     }
 
     private val viewModel by lazy {
@@ -72,10 +61,6 @@ class WriteEditNoteFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.insert_photo -> {
-                selectPhotoIntent.launch("image/*")
-                true
-            }
 
             R.id.delete_note -> {
                 if (noteId == null) Toast.makeText(
@@ -115,12 +100,6 @@ class WriteEditNoteFragment : Fragment() {
                 viewModel.getNote(it).collectLatest { note ->
                     binding.noteModel = note
                 }
-                binding.fabSaveNote.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.edit_note
-                    )
-                )
             }
         }
 
@@ -130,7 +109,6 @@ class WriteEditNoteFragment : Fragment() {
                     Note(
                         title = binding.etNoteTitle.text.toString(),
                         content = binding.etNoteContent.text.toString(),
-                        photoUri = selectedPhotoUri,
                         timeCreated = Date()
                     )
                 )
@@ -140,11 +118,5 @@ class WriteEditNoteFragment : Fragment() {
         }
 
         super.onResume()
-    }
-
-
-    override fun onDestroy() {
-        selectPhotoIntent.unregister()
-        super.onDestroy()
     }
 }

@@ -29,8 +29,6 @@
                 android:textSize="18sp"
                 tools:text="Best Day..."/>
 
-
-
             <TextView
                 android:id="@+id/note_item_content"
                 android:layout_width="wrap_content"
@@ -40,13 +38,6 @@
                 android:textColor="@color/card_content_text_color"
                 android:textSize="12sp"
                 tools:text="@tools:sample/lorem/random"/>
-
-            <ImageView
-                android:id="@+id/note_item_photo"
-                android:contentDescription="@string/note_photo_content_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="@{noteModel.photoUri}"/>
 
             <TextView
                 android:id="@+id/note_item_timestamp"

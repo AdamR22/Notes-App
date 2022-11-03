@@ -41,11 +41,9 @@ class ViewNotesAdapter(private val fa: FragmentManager) :
     override fun onBindViewHolder(holder: NoteItemViewHolder, position: Int) {
         val data = data.currentList[position]
 
-        val noteItemHolder: NoteItemViewHolder = holder as NoteItemViewHolder
+        holder.bind(data)
 
-        noteItemHolder.bind(data)
-
-        noteItemHolder.binding.noteItemCard.setOnClickListener {
+        holder.binding.noteItemCard.setOnClickListener {
             cardClicked(data.id)
         }
 
@@ -67,7 +65,7 @@ class ViewNotesAdapter(private val fa: FragmentManager) :
             }
         }
 
-        fa.beginTransaction().replace(R.id.fragment_container, writeEditNoteFragment).commit()
+        fa.beginTransaction().replace(R.id.fragment_container, writeEditNoteFragment).addToBackStack(null).commit()
     }
 
     private val diffUtilCallback = object : DiffUtil.ItemCallback<Note>() {
