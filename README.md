@@ -1,3 +1,3 @@
 # Notes-App
 
-## Users can save notes and add photos that further describes their notes.
+## Users can save, edit and delete notes
