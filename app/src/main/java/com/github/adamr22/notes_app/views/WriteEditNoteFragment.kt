@@ -31,7 +31,6 @@ class WriteEditNoteFragment : Fragment() {
     companion object {
         fun newInstance() = WriteEditNoteFragment()
     }
-
     private val viewModel by viewModels<WriteEditNoteViewModel>()
 
     private lateinit var binding: FragmentWriteEditNoteBinding
@@ -112,6 +111,7 @@ class WriteEditNoteFragment : Fragment() {
     private fun setUpMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
                 menuInflater.inflate(R.menu.main_menu, menu)
             }
 

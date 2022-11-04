@@ -90,6 +90,7 @@ class ViewNotes : Fragment() {
     private fun setUpMenu() {
         (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
                 menuInflater.inflate(R.menu.theme_menu, menu)
             }
 
