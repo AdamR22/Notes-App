@@ -9,4 +9,7 @@
     <string name="notes">Notes</string>
     <string name="delete_note">Delete Note</string>
     <string name="edit_note">Edit Note</string>
+    <string name="write_note">Write Note</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="note_image">Note Image</string>
 </resources>

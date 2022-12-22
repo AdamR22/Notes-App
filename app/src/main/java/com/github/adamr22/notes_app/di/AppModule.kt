@@ -2,6 +2,7 @@ package com.github.adamr22.notes_app.di
 
 import android.content.Context
 import androidx.room.Room
+import com.github.adamr22.notes_app.model.MIGRATION_1_2
 import com.github.adamr22.notes_app.model.NoteDB
 import com.github.adamr22.notes_app.repository.NoteRepository
 import dagger.Module
@@ -18,7 +19,10 @@ object AppModule {
     @Provides
     @Singleton
     fun providesDatabase(@ApplicationContext context: Context): NoteDB {
-        return Room.databaseBuilder(context, NoteDB::class.java, "note_db").build()
+        return Room
+            .databaseBuilder(context, NoteDB::class.java, "note_db")
+            .addMigrations(MIGRATION_1_2)
+            .build()
     }
 
     @Provides

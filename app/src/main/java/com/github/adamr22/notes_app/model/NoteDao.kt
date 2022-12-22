@@ -21,11 +21,11 @@ interface NoteDao {
     @Query(
         """
             UPDATE notes
-            SET title = :noteTitle, content = :content
+            SET title = :noteTitle, content = :content, image = :noteImage
             WHERE id = :noteId
         """
     )
-    suspend fun updateNote(noteTitle: String, content: String, noteId: Int)
+    suspend fun updateNote(noteTitle: String, content: String, noteImage: Uri?, noteId: Int)
 
     @Delete
     suspend fun deleteNote(note: Note)

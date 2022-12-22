@@ -58,10 +58,10 @@
         <item name="android:inputType">textMultiLine</item>
         <item name="android:hint">@string/content_text_hint</item>
         <item name="android:textColorHint">@color/light_theme_hint_text_color</item>
-        <item name="fontFamily">@font/poppins_bold</item>
+        <item name="fontFamily">@font/poppins</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">24sp</item>
         <item name="android:background">@null</item>
     </style>
 

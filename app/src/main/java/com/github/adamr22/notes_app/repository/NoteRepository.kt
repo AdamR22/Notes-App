@@ -1,5 +1,6 @@
 package com.github.adamr22.notes_app.repository
 
+import android.net.Uri
 import com.github.adamr22.notes_app.model.Note
 import com.github.adamr22.notes_app.model.NoteDB
 import com.github.adamr22.notes_app.model.NoteDao
@@ -15,8 +16,8 @@ class NoteRepository @Inject constructor(db: NoteDB) {
 
     suspend fun saveNote(note: Note) = noteDao.saveNote(note)
 
-    suspend fun updateNote(noteTitle: String, content: String, noteId: Int) =
-        noteDao.updateNote(noteTitle, content, noteId)
+    suspend fun updateNote(noteTitle: String, content: String, noteImage: Uri?, noteId: Int) =
+        noteDao.updateNote(noteTitle, content, noteImage, noteId)
 
     suspend fun deleteNote(note: Note) = noteDao.deleteNote(note)
 }

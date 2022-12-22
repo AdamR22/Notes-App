@@ -1,5 +1,6 @@
 package com.github.adamr22.notes_app.viewmodels
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.adamr22.notes_app.model.Note
@@ -28,9 +29,9 @@ class WriteEditNoteViewModel @Inject constructor(private val repository: NoteRep
         }
     }
 
-    fun updateNote(title: String, content: String, noteId: Int) = viewModelScope.launch {
+    fun updateNote(title: String, content: String, noteImage: Uri?, noteId: Int) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            repository.updateNote(title, content, noteId)
+            repository.updateNote(title, content, noteImage, noteId)
         }
     }
 }

@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/AppBarStyle"
-            app:title="@{noteModel.title == null ? `Write Note` : noteModel.title}"
+            app:title="@{noteModel.title == null ? @string/write_note : noteModel.title}"
             app:layout_constraintBottom_toTopOf="@+id/et_note_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -40,22 +40,42 @@
             android:autofillHints=""
             tools:ignore="LabelFor" />
 
-        <EditText
-            android:id="@+id/et_note_content"
-            style="@style/ThemeNoteContentEditText"
+        <ImageView
+            android:id="@+id/note_image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:text="@{noteModel.content}"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/note_image"
+            app:layout_constraintBottom_toTopOf="@id/et_note_content_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_note_title" />
+
+
+        <ScrollView
+            android:id="@+id/et_note_content_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_note_title"
-            android:autofillHints=""
-            tools:ignore="LabelFor" />
+            app:layout_constraintTop_toBottomOf="@+id/note_image">
+
+            <EditText
+                android:id="@+id/et_note_content"
+                style="@style/ThemeNoteContentEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:text="@{noteModel.content}"
+                android:autofillHints=""
+                tools:ignore="LabelFor" />
+
+        </ScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_save_note"

@@ -1,9 +1,13 @@
 package com.github.adamr22.notes_app.views
 
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
@@ -11,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.github.adamr22.notes_app.R
 import com.github.adamr22.notes_app.databinding.FragmentWriteEditNoteBinding
 import com.github.adamr22.notes_app.model.Note
@@ -18,6 +23,7 @@ import com.github.adamr22.notes_app.viewmodels.WriteEditNoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
 
 @AndroidEntryPoint
@@ -31,9 +37,26 @@ class WriteEditNoteFragment : Fragment() {
     companion object {
         fun newInstance() = WriteEditNoteFragment()
     }
+
     private val viewModel by viewModels<WriteEditNoteViewModel>()
 
     private lateinit var binding: FragmentWriteEditNoteBinding
+
+    private var noteImage: Uri? = null
+
+    private val photoPicker = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        noteImage = it
+    }
+
+    private val storagePermissionAsker =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) photoPicker.launch("image/*")
+        }
+
+    private fun checkPermissionIsGranted() = ContextCompat.checkSelfPermission(
+        requireContext(),
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED
 
     override fun onCreate(savedInstanceState: Bundle?) {
         noteId = arguments?.getInt(NOTE_ID_TAG)
@@ -82,6 +105,8 @@ class WriteEditNoteFragment : Fragment() {
             }
         }
 
+        if (noteImage != null) binding.noteImage.load(File(noteImage.toString()))
+
         binding.fabSaveNote.setOnClickListener {
 
             viewModel.saveNote(
@@ -101,6 +126,7 @@ class WriteEditNoteFragment : Fragment() {
                 noteId = noteId!!,
                 title = binding.etNoteTitle.text.toString(),
                 content = binding.etNoteContent.text.toString(),
+                noteImage = noteImage
             )
             Toast.makeText(requireContext(), "Note edited", Toast.LENGTH_SHORT).show()
         }
@@ -139,6 +165,15 @@ class WriteEditNoteFragment : Fragment() {
                                 .show()
                             parentFragmentManager.popBackStack()
                         }
+
+                        true
+                    }
+
+                    R.id.add_photo -> {
+                        if (!checkPermissionIsGranted()) storagePermissionAsker.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                        else photoPicker.launch(
+                            "image/*"
+                        )
 
                         true
                     }
