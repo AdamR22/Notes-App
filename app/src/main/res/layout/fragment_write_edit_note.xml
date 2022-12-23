@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="noteModel"
             type="com.github.adamr22.notes_app.model.Note" />
@@ -15,43 +16,14 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_edit_write_notes"
+            style="@style/AppBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/AppBarStyle"
-            app:title="@{noteModel.title == null ? @string/write_note : noteModel.title}"
-            app:layout_constraintBottom_toTopOf="@+id/et_note_title"
+            app:layout_constraintBottom_toTopOf="@+id/et_note_content_layout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:menu="@menu/main_menu"/>
-
-        <EditText
-            android:id="@+id/et_note_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:text="@{noteModel.title}"
-            style="@style/ThemeNoteTitleEditText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_edit_write_notes"
-            android:autofillHints=""
-            tools:ignore="LabelFor" />
-
-        <ImageView
-            android:id="@+id/note_image"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:contentDescription="@string/note_image"
-            app:layout_constraintBottom_toTopOf="@id/et_note_content_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_note_title" />
-
+            app:menu="@menu/main_menu"
+            app:title="@{noteModel.title == null ? @string/write_note : noteModel.title}" />
 
         <ScrollView
             android:id="@+id/et_note_content_layout"
@@ -60,49 +32,76 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/note_image">
+            app:layout_constraintTop_toBottomOf="@id/toolbar_edit_write_notes">
 
-            <EditText
-                android:id="@+id/et_note_content"
-                style="@style/ThemeNoteContentEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:ems="10"
-                android:text="@{noteModel.content}"
-                android:autofillHints=""
-                tools:ignore="LabelFor" />
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/et_note_title"
+                    style="@style/ThemeNoteTitleEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:text="@{noteModel.title}"
+                    tools:ignore="LabelFor" />
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/note_image"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="2dp"-->
+<!--                    android:contentDescription="@string/note_image"/>-->
+
+                <EditText
+                    android:id="@+id/et_note_content"
+                    style="@style/ThemeNoteContentEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:text="@{noteModel.content}"
+                    tools:ignore="LabelFor" />
+
+            </LinearLayout>
 
         </ScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_save_note"
-            android:contentDescription="@string/save_note"
+            style="@style/FabStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="16dp"
-            android:focusable="true"
             android:clickable="true"
-            style="@style/FabStyle"
+            android:contentDescription="@string/save_note"
+            android:focusable="true"
             android:src="@drawable/save_icon_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_edit_note"
-            android:contentDescription="@string/edit_note"
+            style="@style/FabStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="16dp"
-            android:focusable="true"
             android:clickable="true"
-            android:visibility="gone"
-            style="@style/FabStyle"
+            android:contentDescription="@string/edit_note"
+            android:focusable="true"
             android:src="@drawable/edit_note"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

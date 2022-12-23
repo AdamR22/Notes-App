@@ -5,8 +5,8 @@
         android:id="@+id/delete_note"
         android:title="@string/delete_note"/>
 
-    <item android:id="@+id/add_photo"
-        android:title="@string/add_photo"
-        android:icon="@drawable/ic_insert_photo_light"
-        app:showAsAction="always"/>
+<!--    <item android:id="@+id/add_photo"-->
+<!--        android:title="@string/add_photo"-->
+<!--        android:icon="@drawable/ic_insert_photo_light"-->
+<!--        app:showAsAction="always"/>-->
 </menu>

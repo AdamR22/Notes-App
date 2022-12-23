@@ -12,4 +12,11 @@
     <string name="write_note">Write Note</string>
     <string name="add_photo">Add Photo</string>
     <string name="note_image">Note Image</string>
+    <string name="note_saved">Note Saved</string>
+    <string name="note_deleted">Note Deleted</string>
+    <string name="note_deleted_error">Cannot delete unsaved note.</string>
+    <string name="note_edited">Note Edited</string>
+    <string name="save_note_dialog_content">Save Note as PDF</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

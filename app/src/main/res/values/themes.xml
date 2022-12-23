@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.NotesApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimary">#ffc0cb</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <!-- Status bar color. -->

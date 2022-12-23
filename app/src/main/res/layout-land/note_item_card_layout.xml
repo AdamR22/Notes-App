@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <data>
+        <import type="android.view.View"/>
         <variable
             name="noteModel"
             type="com.github.adamr22.notes_app.model.Note" />
@@ -39,11 +39,12 @@
                 android:textSize="12sp"
                 tools:text="@tools:sample/lorem/random"/>
 
-            <ImageView
-                android:id="@+id/note_item_image"
-                android:contentDescription="@string/note_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+<!--            <ImageView-->
+<!--                android:id="@+id/note_item_image"-->
+<!--                android:contentDescription="@string/note_image"-->
+<!--                android:visibility="@{noteModel.image == null ? View.GONE : View.VISIBLE}"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
 
             <TextView
                 android:id="@+id/note_item_timestamp"

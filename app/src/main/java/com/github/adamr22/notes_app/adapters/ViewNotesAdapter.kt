@@ -8,12 +8,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.github.adamr22.notes_app.R
 import com.github.adamr22.notes_app.databinding.NoteItemCardLayoutBinding
 import com.github.adamr22.notes_app.model.Note
 import com.github.adamr22.notes_app.views.WriteEditNoteFragment
-import java.io.File
+import com.squareup.picasso.Picasso
 
 class ViewNotesAdapter(private val fa: FragmentManager) :
     RecyclerView.Adapter<ViewNotesAdapter.NoteItemViewHolder>() {
@@ -49,7 +48,9 @@ class ViewNotesAdapter(private val fa: FragmentManager) :
             cardClicked(data.id)
         }
 
-        if (data.image != null) holder.binding.noteItemImage.load(File(data.image!!.toString()))
+//        data.image?.let {
+////            Picasso.get().load(it).into(holder.binding.noteItemImage)
+//        }
 
     }
 

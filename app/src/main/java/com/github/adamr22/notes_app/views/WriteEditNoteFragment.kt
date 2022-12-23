@@ -1,8 +1,11 @@
 package com.github.adamr22.notes_app.views
 
 import android.content.pm.PackageManager
-import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,7 +18,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import coil.load
 import com.github.adamr22.notes_app.R
 import com.github.adamr22.notes_app.databinding.FragmentWriteEditNoteBinding
 import com.github.adamr22.notes_app.model.Note
@@ -23,7 +25,6 @@ import com.github.adamr22.notes_app.viewmodels.WriteEditNoteViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.*
 
 @AndroidEntryPoint
@@ -42,20 +43,21 @@ class WriteEditNoteFragment : Fragment() {
 
     private lateinit var binding: FragmentWriteEditNoteBinding
 
-    private var noteImage: Uri? = null
-
-    private val photoPicker = registerForActivityResult(ActivityResultContracts.GetContent()) {
-        noteImage = it
-    }
 
     private val storagePermissionAsker =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it) photoPicker.launch("image/*")
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            if (it[android.Manifest.permission.WRITE_EXTERNAL_STORAGE] == true) createBitmapAndOpenDialog(
+                false,
+                note!!
+            )
         }
 
     private fun checkPermissionIsGranted() = ContextCompat.checkSelfPermission(
         requireContext(),
         android.Manifest.permission.READ_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+        requireContext(),
+        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     ) == PackageManager.PERMISSION_GRANTED
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,30 +107,36 @@ class WriteEditNoteFragment : Fragment() {
             }
         }
 
-        if (noteImage != null) binding.noteImage.load(File(noteImage.toString()))
-
         binding.fabSaveNote.setOnClickListener {
 
-            viewModel.saveNote(
-                Note(
-                    title = binding.etNoteTitle.text.toString(),
-                    content = binding.etNoteContent.text.toString(),
-                    timeCreated = Date()
-                )
+            note = Note(
+                title = binding.etNoteTitle.text.toString(),
+                content = binding.etNoteContent.text.toString(),
+                timeCreated = Date(),
             )
-            Toast.makeText(requireContext(), "Note saved", Toast.LENGTH_SHORT).show()
-            parentFragmentManager.popBackStack()
 
+            if (checkPermissionIsGranted()) {
+                createBitmapAndOpenDialog(false, note!!)
+            } else {
+                storagePermissionAsker.launch(
+                    arrayOf(
+                        android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
+                )
+            }
         }
 
         binding.fabEditNote.setOnClickListener {
-            viewModel.updateNote(
-                noteId = noteId!!,
+
+            note = Note(
+                id = noteId,
                 title = binding.etNoteTitle.text.toString(),
                 content = binding.etNoteContent.text.toString(),
-                noteImage = noteImage
+                image = null,
             )
-            Toast.makeText(requireContext(), "Note edited", Toast.LENGTH_SHORT).show()
+
+            createBitmapAndOpenDialog(true, note!!)
         }
 
         super.onResume()
@@ -147,7 +155,7 @@ class WriteEditNoteFragment : Fragment() {
                     R.id.delete_note -> {
                         if (noteId == null) Toast.makeText(
                             requireContext(),
-                            "Can't delete unsaved note",
+                            resources.getString(R.string.note_deleted_error),
                             Toast.LENGTH_SHORT
                         ).show()
 
@@ -161,19 +169,14 @@ class WriteEditNoteFragment : Fragment() {
                                 )
                             )
 
-                            Toast.makeText(requireContext(), "Note Deleted", Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                requireContext(),
+                                resources.getString(R.string.note_deleted),
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             parentFragmentManager.popBackStack()
                         }
-
-                        true
-                    }
-
-                    R.id.add_photo -> {
-                        if (!checkPermissionIsGranted()) storagePermissionAsker.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                        else photoPicker.launch(
-                            "image/*"
-                        )
 
                         true
                     }
@@ -182,5 +185,37 @@ class WriteEditNoteFragment : Fragment() {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun createBitmapAndOpenDialog(isEdited: Boolean, note: Note) {
+        val displayMetrics = DisplayMetrics()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            requireContext().display?.getRealMetrics(displayMetrics)
+            displayMetrics.densityDpi
+        } else {
+            requireActivity().windowManager.defaultDisplay.getMetrics(displayMetrics)
+        }
+        requireView().measure(
+            View.MeasureSpec.makeMeasureSpec(
+                displayMetrics.widthPixels, View.MeasureSpec.EXACTLY
+            ),
+            View.MeasureSpec.makeMeasureSpec(
+                displayMetrics.heightPixels, View.MeasureSpec.EXACTLY
+            )
+        )
+
+        requireView().layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels)
+        val bitmap = Bitmap.createBitmap(
+            requireView().measuredWidth,
+            requireView().measuredHeight,
+            Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        requireView().draw(canvas)
+
+        SaveNoteDialog(bitmap, note, isEdited, parentFragmentManager).show(
+            parentFragmentManager,
+            SaveNoteDialog.TAG
+        )
     }
 }
